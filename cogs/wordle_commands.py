@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 from typing import Dict, Iterable, List, Tuple, Set
 import random
+import json
 
 import discord
 from discord.ext import commands, vbu
@@ -267,7 +268,7 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
             return self._words
 
         # Get from local files
-        with open("googlewords.txt") as a:
+        with open("new_words.txt") as a:
             text = a.read()
         self._words = tuple(i.strip().upper() for i in text.strip().split("\n") if len(i.strip()) == 5)
         return self._words
@@ -292,7 +293,7 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
 
         # Pick a word for them to have to guess
         all_words = self.get_words()
-        valid_words = [i for i in all_words if len(i) == characters and all(c in "ABCDEFGHIJKLMNOPRSTUWYZ" for c in i)]
+        valid_words = [i for i in all_words if len(i) == characters and not any(c in "QVX" for c in i)]
         picked_word = random.choice(valid_words)
 
         # And it's game time
