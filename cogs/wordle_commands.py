@@ -208,10 +208,6 @@ class WordleGame:
         letter_buffer = []
         while True:
 
-            # Break if they got it
-            if self.guesses and self.guesses[-1] == self.word:
-                break
-
             # Wait for an interaction
             interaction = await self.bot.wait_for(
                 "component_interaction",
@@ -223,7 +219,11 @@ class WordleGame:
             if letter == "BACKSPACE":
                 letter_buffer.pop()
             elif letter == "ENTER":
-                self.guesses.append("".join(letter_buffer))
+                guessed_word = "".join(letter_buffer)
+                if guessed_word not in self.bot.get_cog("WordleCommands").get_words():
+                    await interaction.response.send_message(f"**{guessed_word}** isn't a valid word!", ephemeral=True)
+                    continue
+                self.guesses.append(guessed_word)
                 letter_buffer.clear()
                 if self.guesses[-1] == self.word or len(self.guesses) == self.guess_count:
                     break
