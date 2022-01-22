@@ -220,7 +220,7 @@ class WordleGame:
                 letter_buffer.pop()
             elif letter == "ENTER":
                 guessed_word = "".join(letter_buffer)
-                if guessed_word not in self.bot.get_cog("WordleCommands").get_words():
+                if guessed_word not in self.bot.get_cog("WordleCommands").get_all_words():
                     await interaction.response.send_message(f"**{guessed_word}** isn't a valid word!", ephemeral=True)
                     continue
                 self.guesses.append(guessed_word)
@@ -255,7 +255,7 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
 
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
-        self._words = None
+        self._keywords = None
         self.get_words()
 
     def get_words(self) -> Tuple[str]:
@@ -264,14 +264,29 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
         """
 
         # Only get them once
-        if self._words is not None:
-            return self._words
+        if self._keywords is not None:
+            return self._keywords
 
         # Get from local files
         with open("new_words.txt") as a:
             text = a.read()
-        self._words = tuple(i.strip().upper() for i in text.strip().split("\n") if len(i.strip()) == 5)
-        return self._words
+        self._keywords = tuple(i.strip().upper() for i in text.strip().split("\n") if len(i.strip()) == 5)
+        return self._keywords
+
+    def get_all_words(self) -> Tuple[str]:
+        """
+        Get a list of every word in the English language.
+        """
+
+        # Only get them once
+        if self._keywords is not None:
+            return self._keywords
+
+        # Get from local files
+        with open("words_alpha.txt") as a:
+            text = a.read()
+        self._keywords = tuple(i.strip().upper() for i in text.strip().split("\n") if len(i.strip()) == 5)
+        return self._keywords
 
     @commands.command(
         application_command_meta=commands.ApplicationCommandMeta(),
