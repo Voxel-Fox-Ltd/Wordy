@@ -256,7 +256,9 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         self._keywords = None
+        self._all_words = None
         self.get_words()
+        self.get_all_words()
 
     def get_words(self) -> Tuple[str]:
         """
@@ -279,14 +281,14 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
         """
 
         # Only get them once
-        if self._keywords is not None:
-            return self._keywords
+        if self._all_words is not None:
+            return self._all_words
 
         # Get from local files
         with open("words_alpha.txt") as a:
             text = a.read()
-        self._keywords = tuple(i.strip().upper() for i in text.strip().split("\n") if len(i.strip()) == 5)
-        return self._keywords
+        self._all_words = tuple(i.strip().upper() for i in text.strip().split("\n") if len(i.strip()) == 5)
+        return self._all_words
 
     @commands.command(
         application_command_meta=commands.ApplicationCommandMeta(),
