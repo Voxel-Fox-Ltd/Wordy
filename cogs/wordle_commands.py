@@ -118,11 +118,11 @@ class WordleGame:
 
         letters = [
             "ABCDE",
-            "FGHIJ",
-            "KLMNO",
-            "PRSTU",
-            "WYZ",
-        ]  # QVX are removed
+            "FGHIK",
+            "LMNOP",
+            "RSTUV",
+            "WXY",
+        ]  # ZJQ are removed
         guessed_letters = self.get_guessed_letters()
         v = discord.ui.MessageComponents(*[
             discord.ui.ActionRow(*[
@@ -310,7 +310,7 @@ class WordleCommands(vbu.Cog[vbu.Bot]):
 
         # Pick a word for them to have to guess
         all_words = self.get_words()
-        valid_words = [i for i in all_words if len(i) == characters and not any(c in "QVX" for c in i)]
+        valid_words = [i for i in all_words if len(i) == characters and not any(c in "ZJQ" for c in i)]
         picked_word = random.choice(valid_words)
 
         # And it's game time
